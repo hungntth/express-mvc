@@ -6,21 +6,24 @@ class UserController {
       const users = await User.getAll();
       res.render('users/index', {
         title: 'Quản lý người dùng',
-        users
+        users,
+        user: req.session.user
       });
     } catch (error) {
       console.error('Users index error:', error);
       req.flash('error_msg', 'Có lỗi xảy ra khi tải danh sách người dùng');
       res.render('users/index', {
         title: 'Quản lý người dùng',
-        users: []
+        users: [],
+        user: req.session.user
       });
     }
   }
 
   static showCreate(req, res) {
     res.render('users/create', {
-      title: 'Thêm người dùng mới'
+      title: 'Thêm người dùng mới',
+      user: req.session.user
     });
   }
 
@@ -68,7 +71,7 @@ class UserController {
 
       res.render('users/edit', {
         title: 'Chỉnh sửa người dùng',
-        user
+        user,
       });
     } catch (error) {
       console.error('Show edit user error:', error);

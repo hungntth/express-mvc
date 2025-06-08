@@ -13,7 +13,8 @@ class DashboardController {
       res.render('dashboard/index', {
         title: 'Dashboard',
         stats,
-        recentUsers: users.slice(0, 5)
+        recentUsers: users.slice(0, 5),
+        user: req.session.user
       });
     } catch (error) {
       console.error('Dashboard error:', error);
@@ -21,7 +22,8 @@ class DashboardController {
       res.render('dashboard/index', {
         title: 'Dashboard',
         stats: { totalUsers: 0, adminUsers: 0, regularUsers: 0 },
-        recentUsers: []
+        recentUsers: [],
+        user: req.session.user
       });
     }
   }
