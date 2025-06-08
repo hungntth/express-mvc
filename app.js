@@ -1,5 +1,5 @@
 const express = require("express");
-const { engine } = require("express-handlebars");
+const { engine, create } = require("express-handlebars");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const flash = require("connect-flash");
@@ -14,6 +14,8 @@ const SQLiteStore = require("connect-sqlite3")(session);
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
 const userRoutes = require("./routes/users");
+const productRoutes = require("./routes/products");
+
 const { initAdminUser } = require("./inits/InitAdmin");
 
 // Import database
@@ -22,6 +24,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Handlebars setup
+
 app.engine(
   "handlebars",
   engine({
@@ -33,9 +36,23 @@ app.engine(
       formatDate: (date) => {
         return new Date(date).toLocaleDateString("vi-VN");
       },
+      range: (from, to) => {
+        let arr = [];
+        for (let i = from; i <= to; i++) {
+          arr.push(i);
+        }
+        return arr;
+      },
+      queryString: (obj) => {
+        return Object.entries(obj)
+          .filter(([_, v]) => v != null && v !== "")
+          .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+          .join("&");
+      },
     },
   })
 );
+
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
 
@@ -75,6 +92,7 @@ app.use((req, res, next) => {
 app.use("/auth", authRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/users", userRoutes);
+app.use("/products", productRoutes);
 
 // Home route
 app.get("/", (req, res) => {

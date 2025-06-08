@@ -1,0 +1,42 @@
+<h1 class="text-2xl font-bold mb-6">Chỉnh sửa sản phẩm</h1>
+
+<form action="/products/{{product.id}}" method="POST" enctype="multipart/form-data" class="space-y-4">
+    <input type="hidden" name="_method" value="PUT" />
+    <div>
+        <label class="block mb-1">Tên sản phẩm</label>
+        <input type="text" name="name" value="{{product.name}}" class="border px-3 py-2 rounded w-full" required />
+    </div>
+    <div>
+        <label class="block mb-1">Mô tả</label>
+        <textarea name="description" class="border px-3 py-2 rounded w-full">{{product.description}}</textarea>
+    </div>
+    <div>
+        <label class="block mb-1">Giá</label>
+        <input type="number" name="price" step="0.01" value="{{product.price}}" class="border px-3 py-2 rounded w-full"
+            required />
+    </div>
+    <div>
+        <label class="block mb-1">Danh mục</label>
+        <input type="text" name="category" value="{{product.category}}" class="border px-3 py-2 rounded w-full" />
+    </div>
+    <div>
+        <label class="block mb-1">Trạng thái</label>
+        <select name="status" class="border px-3 py-2 rounded w-full">
+            <option value="active" {{#if (eq product.status 'active' )}}selected{{/if}}>Đang bán</option>
+            <option value="inactive" {{#if (express-handlebars product.status 'inactive' )}}selected{{/if}}>Ngừng bán</option>
+        </select>
+    </div>
+    <div>
+        <label class="block mb-1">Ảnh hiện tại</label>
+        {{#if product.image}}
+        <img src="{{product.image}}" alt="{{product.name}}" class="h-24 w-24 object-cover rounded mb-2" />
+        {{else}}
+        <p>Không có ảnh</p>
+        {{/if}}
+        <input type="file" name="image" class="border px-3 py-2 rounded w-full" />
+    </div>
+    <div>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Cập nhật</button>
+        <a href="/products" class="ml-2 text-gray-600">Hủy</a>
+    </div>
+</form>

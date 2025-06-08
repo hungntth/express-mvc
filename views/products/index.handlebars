@@ -1,0 +1,100 @@
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-900">Quản lý sản phẩm</h1>
+        <a href="/products/create"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+            <i class="fas fa-plus mr-2"></i>
+            Thêm sản phẩm
+        </a>
+    </div>
+
+    <!-- Filter Form -->
+    <form class="flex flex-wrap space-x-2 mb-4" method="GET" action="/products">
+        <input type="text" name="search" placeholder="Tên sản phẩm" value="{{filter.search}}"
+            class="border px-3 py-2 rounded" />
+        <select name="category" class="border px-3 py-2 rounded">
+            <option value="">-- Danh mục --</option>
+            <option value="electronics" {{#if (eq filter.category 'electronics' )}}selected{{/if}}>Điện tử</option>
+            <option value="fashion" {{#if (eq filter.category 'fashion' )}}selected{{/if}}>Thời trang</option>
+            <!-- Add more categories -->
+        </select>
+        <select name="status" class="border px-3 py-2 rounded">
+            <option value="">-- Trạng thái --</option>
+            <option value="active" {{#if (eq filter.status 'active' )}}selected{{/if}}>Đang bán</option>
+            <option value="inactive" {{#if (eq filter.status 'inactive' )}}selected{{/if}}>Ngừng bán</option>
+        </select>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Lọc</button>
+        <a href="?{{queryString filter}}&export=excel" class="bg-green-500 text-white px-4 py-2 rounded ml-auto">
+            Export Excel
+        </a>
+    </form>
+
+    <!-- Products Table -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+        {{#if products.length}}
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ảnh</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Giá</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Danh mục</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Trạng thái</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {{#each products}}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {{#if image}}
+                        <img src="{{image}}" alt="{{name}}" class="h-12 w-12 object-cover rounded" />
+                        {{else}} -
+                        {{/if}}
+                    </td>
+                    <td class="px-6 py-4">{{name}}</td>
+                    <td class="px-6 py-4">{{price}}</td>
+                    <td class="px-6 py-4">{{category}}</td>
+                    <td class="px-6 py-4">
+                        <span
+                            class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{#if (eq status 'active')}}bg-green-100 text-green-800{{else}}bg-red-100 text-red-800{{/if}}">
+                            {{#if (eq status 'active')}}Đang bán{{else}}Ngừng bán{{/if}}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 space-x-2">
+                        <a href="/products/{{id}}/edit" class="text-blue-600 hover:text-blue-900">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <form method="POST" action="/products/{{id}}?_method=DELETE" class="inline"
+                            onsubmit="return confirm('Bạn có chắc chắn muốn xoá sản phẩm này?')">
+                            <button type="submit" class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="flex justify-center space-x-2 mt-4">
+            {{#if pagination.hasPrev}}
+            <a href="?page={{pagination.prevPage}}&{{queryString filter}}" class="px-3 py-1 border rounded">Trang
+                trước</a>
+            {{/if}}
+            {{#each (range 1 pagination.totalPages)}}
+            <a href="?page={{this}}&{{queryString ../filter}}"
+                class="px-3 py-1 border rounded {{#if (eq this ../pagination.currentPage)}}bg-blue-500 text-white{{/if}}">{{this}}</a>
+            {{/each}}
+            {{#if pagination.hasNext}}
+            <a href="?page={{pagination.nextPage}}&{{queryString filter}}" class="px-3 py-1 border rounded">Trang
+                sau</a>
+            {{/if}}
+        </div>
+        {{else}}
+        <div class="text-center py-12">Chưa có sản phẩm nào</div>
+        {{/if}}
+    </div>
+</div>
