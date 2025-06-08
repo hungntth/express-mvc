@@ -1,0 +1,103 @@
+<div class="space-y-6">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                    <i class="fas fa-users text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Tổng người dùng</p>
+                    <p class="text-2xl font-bold text-gray-900">{{stats.totalUsers}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-green-100 text-green-600">
+                    <i class="fas fa-user-shield text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Quản trị viên</p>
+                    <p class="text-2xl font-bold text-gray-900">{{stats.adminUsers}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                    <i class="fas fa-user text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Người dùng thường</p>
+                    <p class="text-2xl font-bold text-gray-900">{{stats.regularUsers}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Users -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">Người dùng mới nhất</h3>
+        </div>
+        <div class="p-6">
+            {{#if recentUsers.length}}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Người dùng
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Email
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Vai trò
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Ngày tạo
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {{#each recentUsers}}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                        <i class="fas fa-user text-gray-500 text-sm"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <div class="text-sm font-medium text-gray-900">{{username}}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{email}}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{#if (eq role 'admin')}}bg-red-100 text-red-800{{else}}bg-green-100 text-green-800{{/if}}">
+                                    {{#if (eq role 'admin')}}Quản trị viên{{else}}Người dùng{{/if}}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{formatDate created_at}}
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            {{else}}
+            <div class="text-center py-8">
+                <i class="fas fa-users text-4xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500">Chưa có người dùng nào</p>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
