@@ -5,14 +5,18 @@ const bodyParser = require("body-parser");
 const flash = require("connect-flash");
 const methodOverride = require("method-override");
 const path = require("path");
+const { AppDataSource } = require("./data-source");
+
+// Import TypeORM store for session management
+const SQLiteStore = require("connect-sqlite3")(session);
 
 // Import routes
 const authRoutes = require("./routes/auth");
 const dashboardRoutes = require("./routes/dashboard");
 const userRoutes = require("./routes/users");
+const { initAdminUser } = require("./inits/InitAdmin");
 
 // Import database
-const db = require("./models/database");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -44,10 +48,16 @@ app.use(methodOverride("_method"));
 // Session configuration
 app.use(
   session({
-    secret: "your_secret_key", // Change this to a secure value
+    store: new SQLiteStore({
+      db: "database.sqlite",
+      dir: "./",
+    }),
+    secret: "your_secret_key",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }, // Set to true if using HTTPS
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24,
+    },
   })
 );
 
@@ -75,13 +85,15 @@ app.get("/", (req, res) => {
   }
 });
 
-// Initialize database and start server
-db.init()
-  .then(() => {
+AppDataSource.initialize()
+  .then(async () => {
+    console.log("Data Source has been initialized!");
+    await initAdminUser();
     app.listen(PORT, () => {
       console.log(`Server đang chạy tại http://localhost:${PORT}`);
     });
+    // app.listen... hoặc start server ở đây
   })
   .catch((err) => {
-    console.error("Lỗi khởi tạo database:", err);
+    console.error("Error during Data Source initialization:", err);
   });

@@ -8,13 +8,17 @@
     "dev": "nodemon app.js"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "connect-flash": "^0.1.1",
+    "connect-sqlite3": "^0.9.15",
+    "connect-typeorm": "^2.0.0",
     "express": "^4.18.2",
     "express-handlebars": "^7.1.2",
     "express-session": "^1.17.3",
+    "method-override": "^3.0.0",
+    "reflect-metadata": "^0.2.2",
     "sqlite3": "^5.1.6",
-    "body-parser": "^1.20.2",
-    "connect-flash": "^0.1.1",
-    "method-override": "^3.0.0"
+    "typeorm": "^0.3.24"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

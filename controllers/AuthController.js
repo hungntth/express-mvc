@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const UserService = require("../services/UserService");
 
 class AuthController {
   static showLogin(req, res) {
@@ -17,14 +17,13 @@ class AuthController {
         return res.redirect("/auth/login");
       }
 
-      const user = await User.findByUsername(username);
-      console.log(user);
+      const user = await UserService.findByUsername(username);
       if (!user) {
         req.flash("error_msg", "Tên đăng nhập không tồn tại");
         return res.redirect("/auth/login");
       }
 
-      if (!User.validatePassword(password, user.password, user.salt)) {
+      if (!UserService.validatePassword(password, user.password, user.salt)) {
         req.flash("error_msg", "Mật khẩu không chính xác");
         return res.redirect("/auth/login");
       }

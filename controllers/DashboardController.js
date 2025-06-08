@@ -1,9 +1,9 @@
-const User = require('../models/User');
+const UserService = require("../services/UserService");
 
 class DashboardController {
   static async index(req, res) {
     try {
-      const users = await User.getAll();
+      const users = await UserService.getAll();
       const stats = {
         totalUsers: users.length,
         adminUsers: users.filter(user => user.role === 'admin').length,
